@@ -13,7 +13,7 @@ Usage: `localhost/update.php?p=password&d=.`
 If the password is wrong, a 404 page is shown.
 The password can be changed with `$pwd`
 
-If you rename the file, you need to update the `$url0` variable.
+If you rename the file to something else than `update.php`, you need to change the `$url0` variable.
 
 ## Screenshot
 
