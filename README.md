@@ -1,6 +1,6 @@
 # php-filemanager
 
-A very simple PHP File Manager.
+A very simple PHP File Manager. The code is a mess ... sorry.
 
 Functions: Delete, View, Edit text files in the browser; Create and Delete (empty) Folders
 
