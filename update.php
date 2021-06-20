@@ -326,7 +326,7 @@ textarea
 			<h2>Edit file</h2>
 			<input type="text" name="edname" placeholder="Filename" value="<?php echo $efile; ?>">
 			<input type="submit" value="Save File" name="edsubmit">
-			<textarea name="edtext" rows="40" cols="80" spellcheck="false" placeholder="Content"><?php echo file_get_contents($epath); ?></textarea>
+			<textarea name="edtext" rows="40" cols="80" spellcheck="false" placeholder="Content"><?php echo htmlspecialchars(file_get_contents($epath)); ?></textarea>
 		</form>
 	</div>
 </td>
