@@ -19,7 +19,7 @@ If you rename the file, you need to update the `$url0` variable.
 
 ![Screenshot](scrn.png)
 
-## TODO:
+## TODO
 - File upload
 - Folder (zip) upload
 - Move/Rename/Copy
