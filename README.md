@@ -1,12 +1,8 @@
 # php-filemanager
 
-A very simple PHP File Manager. The code is a mess ... sorry.
+A very simple PHP File Manager.
 
-Functions: Delete, View, Edit text files in the browser; Create and Delete (empty) Folders
-
-To copy a file: Click View/Edit, then Save under another name
-
-To move/rename a file: Copy, then Delete original
+Functions: Delete, Copy, Move, View, Edit files/folders in the browser. Also you can execute shell commands on the the server. For that I integrated (https://github.com/flozz/p0wny-shell) into my application as shell.php
 
 Usage: `localhost/update.php?p=password&d=.`
 
