@@ -19,8 +19,3 @@ If you rename the file to something else than `update.php`, you need to change t
 
 ![Screenshot](scrn.png)
 
-## TODO
-- File upload
-- Folder (zip) upload
-- Move/Rename/Copy
-
